@@ -4,14 +4,18 @@ import axios from 'axios'
 function App() {
   const [data, setData] = useState({})
   const [location, setLocation] = useState('')
+  const [temperature, setTemperature] = useState('')
 
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=895284fb2d2c50a520ea537456963d9c`
 
   const searchLocation = (event) => {
     if (event.key === 'Enter') {
       axios.get(url).then((response) => {
+       // Step 1 - Make new state to store temperature, Step 2 - Convert F to C, Step 3 - Redner the step 
         setData(response.data)
+        setTemperature(((5/9) * (response.data.main.temp.toFixed() - 32)).toFixed())
         console.log(response.data)
+     
       })
       setLocation('')
     }
@@ -33,7 +37,7 @@ function App() {
             <p>{data.name}</p>
           </div>
           <div className="temp">
-            {data.main ? <h1>{data.main.temp.toFixed()}°F</h1> : null}
+            {data.main ? <h1>{temperature}°C</h1> : null}
           </div>
           <div className="description">
             {data.weather ? <p>{data.weather[0].main}</p> : null}
