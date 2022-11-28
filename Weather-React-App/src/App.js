@@ -6,14 +6,16 @@ function App() {
   const [location, setLocation] = useState('')
   const [temperature, setTemperature] = useState('')
 
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=895284fb2d2c50a520ea537456963d9c`
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=895284fb2d2c50a520ea537456963d9c`
 
   const searchLocation = (event) => {
     if (event.key === 'Enter') {
       axios.get(url).then((response) => {
-       // Step 1 - Make new state to store temperature, Step 2 - Convert F to C, Step 3 - Redner the step 
+        console.log(data.weather)
+       // Step 1 - Make new state to store temperature, Step 2 - Convert F to C, Step 3 - Render the step 
         setData(response.data)
-        setTemperature(((5/9) * (response.data.main.temp.toFixed() - 32)).toFixed())
+        setTemperature(response.data.main.temp)
+        //setTemperature(((5/9) * (response.data.main.temp.toFixed() - 32)).toFixed()) //if you just request metric temps you don't need to convert
         console.log(response.data)
      
       })
@@ -44,10 +46,11 @@ function App() {
           </div>
         </div>
 
+        {/* this could be its own component with relevant data passed in as props */}
         {data.name !== undefined &&
           <div className="bottom">
             <div className="feels">
-              {data.main ? <p className='bold'>{data.main.feels_like.toFixed()}°F</p> : null}
+              {data.main ? <p className='bold'>{data.main.feels_like.toFixed()}°C</p> : null}
               <p>Feels Like</p>
             </div>
             <div className="humidity">
